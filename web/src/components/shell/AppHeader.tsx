@@ -1,56 +1,52 @@
+import { useCallback, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { config } from '../../config';
-import { CtaLogo } from './CtaLogo';
-import { AppLauncherIcon, MenuIcon } from './icons';
+import { Icon } from '../ui/Icon';
+import { IconButton } from '../ui/Button';
+import { useDismiss } from '../ui/useDismiss';
 import { UserMenu } from './UserMenu';
 import type { Me } from '../../api/me';
 
-interface AppHeaderProps {
-  me: Me | undefined;
-  navOpen: boolean;
-  onToggleNav: () => void;
-}
+/** The shared CTA header: app launcher and app name on the left, CTA logo centred, profile on the right. */
+export function AppHeader({ me }: { me: Me | undefined }) {
+  const [launcherOpen, setLauncherOpen] = useState(false);
+  const launcherRef = useRef<HTMLDivElement>(null);
+  const closeLauncher = useCallback(() => setLauncherOpen(false), []);
+  useDismiss(launcherOpen, closeLauncher, launcherRef);
 
-/**
- * The CTA blue header shared with the Bug Tracking app: app launcher on the
- * left, logo centred, user menu on the right.
- *
- * TODO: swap for the shared header component from the Bug Tracking app once
- * that repo is available (see components/shell/README.md).
- */
-export function AppHeader({ me, navOpen, onToggleNav }: AppHeaderProps) {
   return (
-    <header className="app-header">
-      <div className="app-header-start">
-        {config.appLauncherUrl ? (
-          <a className="header-icon-button" href={config.appLauncherUrl} aria-label="CTA apps">
-            <AppLauncherIcon />
-          </a>
-        ) : (
-          <button type="button" className="header-icon-button" aria-label="CTA apps" title="CTA apps">
-            <AppLauncherIcon />
-          </button>
-        )}
-        <button
-          type="button"
-          className="header-icon-button nav-toggle"
-          aria-label={navOpen ? 'Close navigation' : 'Open navigation'}
-          aria-expanded={navOpen}
-          aria-controls="side-nav"
-          onClick={onToggleNav}
-        >
-          <MenuIcon />
-        </button>
-        <Link to="/" className="app-title">
+    <header className="topbar">
+      <div className="topbar-left" ref={launcherRef}>
+        <IconButton
+          className="header-icon"
+          icon="apps"
+          label="Open app launcher"
+          expanded={launcherOpen}
+          onClick={() => setLauncherOpen((open) => !open)}
+        />
+        <span className="header-divider" />
+        <Link to="/" className="brand-name">
           CTA Training
         </Link>
+
+        {launcherOpen && (
+          <div className="launcher-panel">
+            <div className="launcher-title">CTA apps</div>
+            <Link to="/" onClick={closeLauncher}>
+              <Icon name="book" /> CTA Training
+            </Link>
+            {config.launcherApps.map((app) => (
+              <a key={app.name} href={app.url} target="_blank" rel="noreferrer" onClick={closeLauncher}>
+                <Icon name={app.icon} /> {app.name} <Icon name="external" size={16} />
+              </a>
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="app-header-center">
-        <CtaLogo />
-      </div>
+      <img alt="California Teachers Association" className="cta-logo" src="/cta-logo-white.png" />
 
-      <div className="app-header-end">{me && <UserMenu me={me} />}</div>
+      {me ? <UserMenu me={me} /> : <div className="profile-wrap" />}
     </header>
   );
 }

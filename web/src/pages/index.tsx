@@ -1,14 +1,16 @@
-import { Link, useOutletContext } from 'react-router';
+import { Link } from 'react-router';
 import { PagePlaceholder } from '../components/PagePlaceholder';
-import type { Me } from '../api/me';
+import { Icon } from '../components/ui/Icon';
+
+export { DesignSystemPage } from './DesignSystemPage';
 
 export function BrowsePage() {
-  const me = useOutletContext<Me>();
   return (
     <PagePlaceholder
-      title={`Welcome, ${me.displayName.split(' ')[0] ?? me.displayName}`}
-      description="Find trainings and register for the sessions that fit your schedule."
-      phase="Phase 1"
+      title="Browse trainings"
+      description="Find a training and register for the sessions that fit your schedule."
+      phase="step 3"
+      icon="search"
     >
       <p>Session cards with seats left, a calendar view, and filters by category, format and date.</p>
     </PagePlaceholder>
@@ -20,7 +22,8 @@ export function MyTrainingsPage() {
     <PagePlaceholder
       title="My trainings"
       description="Everything you're signed up for, waiting on, or have completed."
-      phase="Phase 2"
+      phase="step 4"
+      icon="book"
     >
       <p>Upcoming, pending approval, waitlisted and past trainings, with certificates to download.</p>
     </PagePlaceholder>
@@ -32,7 +35,8 @@ export function ApprovalsPage() {
     <PagePlaceholder
       title="Approvals"
       description="Registration requests from your staff that need your decision."
-      phase="Phase 2"
+      phase="step 4"
+      icon="approvals"
     >
       <p>Approve or deny requests here or from the email link. Requests are never approved automatically.</p>
     </PagePlaceholder>
@@ -44,9 +48,10 @@ export function TeachingPage() {
     <PagePlaceholder
       title="My teaching"
       description="The trainings you run, and what needs your attention."
-      phase="Phase 1"
+      phase="step 2"
+      icon="teach"
     >
-      <p>Upcoming sessions, enrollment against minimums, and a guided flow for creating a new training.</p>
+      <p>Upcoming sessions, enrollment against minimums, and creating a new training.</p>
     </PagePlaceholder>
   );
 }
@@ -56,7 +61,8 @@ export function AdminPage() {
     <PagePlaceholder
       title="Admin"
       description="Settings that apply to every training."
-      phase="Phases 1 and 6"
+      phase="steps 2 and 6"
+      icon="admin"
     >
       <p>Categories, locations, hotels, email templates, supervisor assignments, roles and the audit log.</p>
     </PagePlaceholder>
@@ -65,11 +71,15 @@ export function AdminPage() {
 
 export function NotFoundPage() {
   return (
-    <section className="page" aria-labelledby="page-title">
-      <h1 id="page-title">Page not found</h1>
-      <p className="page-description">
-        That link doesn't go anywhere. <Link to="/">Browse trainings</Link> instead.
-      </p>
-    </section>
+    <div className="empty-state">
+      <span className="empty-icon">
+        <Icon name="search" />
+      </span>
+      <h1>Page not found</h1>
+      <p>That link doesn't go anywhere.</p>
+      <Link className="button button-secondary" to="/">
+        Browse trainings
+      </Link>
+    </div>
   );
 }

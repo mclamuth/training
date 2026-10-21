@@ -1,0 +1,409 @@
+/* Ported from the approved Figma Make design (CTA Training App Shell). */
+
+.approvals-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.approvals-preview {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.approvals-preview > span {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.approvals-preview .segmented-control button {
+  min-height: 30px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.approvals-heading {
+  margin-bottom: 20px;
+}
+
+.approvals-heading h1 {
+  margin-bottom: 5px;
+}
+
+.approvals-heading p {
+  margin-bottom: 0;
+}
+
+.supervisor-note {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 18px;
+  padding: 13px 16px;
+  border: 1px solid #bbd8e9;
+  border-radius: var(--radius);
+  background: var(--cta-blue-soft);
+}
+
+.supervisor-note > span {
+  color: var(--cta-blue);
+}
+
+.supervisor-note p {
+  margin-bottom: 0;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.approval-tabs {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.approval-tabs button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 2px 12px;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.approval-tabs button.active {
+  color: var(--cta-dark-blue);
+}
+
+.approval-tabs button.active::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 3px;
+  background: var(--cta-blue);
+  content: "";
+}
+
+.approval-tabs button span {
+  min-width: 22px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  border-radius: 12px;
+  background: var(--cta-light-blue);
+  color: var(--cta-dark-blue);
+  font-size: 11px;
+}
+
+.requests-layout {
+  display: grid;
+  gap: 12px;
+}
+
+.bulk-approval-bar {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 12px 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.bulk-approval-bar.visible {
+  border-color: #a9cde2;
+  background: var(--cta-blue-soft);
+}
+
+.bulk-select-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.bulk-select-all input,
+.request-checkbox input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--cta-blue);
+  cursor: pointer;
+}
+
+.approval-request-list {
+  display: grid;
+  gap: 10px;
+}
+
+.approval-request-card {
+  display: grid;
+  grid-template-columns: 22px minmax(180px, .8fr) minmax(280px, 1.35fr) 160px 176px;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.approval-request-card:has(.request-checkbox input:checked) {
+  border-color: #a9cde2;
+  background: var(--cta-blue-soft);
+}
+
+.request-checkbox {
+  display: inline-flex;
+}
+
+.request-person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.request-person > span:last-child {
+  min-width: 0;
+}
+
+.request-person strong,
+.request-person small {
+  display: block;
+}
+
+.request-person strong {
+  margin-bottom: 3px;
+  font-size: 14px;
+}
+
+.request-person small {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.request-chips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.request-chips .format-badge,
+.request-chips .chip {
+  min-height: 23px;
+  font-size: 11px;
+}
+
+.request-training h2 {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+.request-training p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0;
+  font-size: 12px;
+}
+
+.request-timing strong,
+.request-timing span {
+  display: block;
+}
+
+.request-timing strong {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.request-timing span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  color: var(--success);
+  font-size: 10px;
+}
+
+.request-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.request-actions .button {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+
+.approvals-empty {
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  text-align: center;
+}
+
+.approvals-empty h2 {
+  margin-bottom: 5px;
+}
+
+.approvals-empty p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.decided-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.decision-list {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.decision-row {
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto 190px;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+}
+
+.decision-row + .decision-row {
+  border-top: 1px solid var(--border);
+}
+
+.decision-icon {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.decision-icon.approved {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.decision-icon.denied {
+  background: var(--error-soft);
+  color: var(--error);
+}
+
+.decision-row > div strong,
+.decision-row > div span {
+  display: block;
+}
+
+.decision-row > div strong {
+  margin-bottom: 3px;
+  font-size: 14px;
+}
+
+.decision-row > div span,
+.decision-row > small {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.email-result-wrap {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 80px;
+}
+
+.email-result-card {
+  width: min(600px, 100%);
+  padding: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  text-align: center;
+}
+
+.email-result-icon {
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-radius: 50%;
+}
+
+.email-result-icon.approved {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.email-result-icon.decided {
+  background: var(--cta-light-blue);
+  color: var(--cta-dark-blue);
+}
+
+.email-result-card h1 {
+  max-width: 500px;
+  margin: 0 auto 12px;
+  font-size: 24px;
+}
+
+.email-result-card p {
+  max-width: 460px;
+  margin: 0 auto 24px;
+  font-size: 14px;
+}
+
+.deny-dialog {
+  width: min(500px, 100%);
+}
+
+.deny-dialog > p {
+  margin: 4px 0 20px;
+  font-size: 13px;
+}
+
+.deny-dialog .dialog-field > span small {
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.deny-help {
+  margin: 8px 0 20px !important;
+  color: var(--text-secondary);
+  font-size: 11px !important;
+}

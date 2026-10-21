@@ -1,0 +1,480 @@
+/* Ported from the approved Figma Make design (CTA Training App Shell). */
+
+.my-trainings-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.my-page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.my-page-heading p {
+  margin-bottom: 0;
+}
+
+.my-page-heading .variant-switcher {
+  margin-top: 1px;
+}
+
+.my-tabs {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 24px;
+  padding: 0 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.my-tabs button {
+  position: relative;
+  min-height: 54px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.my-tabs button:hover {
+  color: var(--text);
+}
+
+.my-tabs button.active {
+  color: var(--cta-dark-blue);
+}
+
+.my-tabs button.active::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 3px;
+  background: var(--cta-blue);
+  content: "";
+}
+
+.my-tabs button span {
+  min-width: 23px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  border-radius: 12px;
+  background: var(--gray-soft);
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.my-tabs button.active span {
+  background: var(--cta-light-blue);
+  color: var(--cta-dark-blue);
+}
+
+.my-tab-panel,
+.history-panel,
+.certificates-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.tab-panel-heading,
+.waiting-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tab-panel-heading h2,
+.waiting-heading h2 {
+  margin-bottom: 4px;
+}
+
+.tab-panel-heading p,
+.waiting-heading p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.tab-panel-heading > span,
+.waiting-heading > span {
+  margin-bottom: 3px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.my-training-list {
+  display: grid;
+  gap: 12px;
+}
+
+.my-training-card {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 180px;
+  align-items: start;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.date-tile {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  text-align: center;
+}
+
+.date-tile span {
+  display: block;
+  padding: 5px;
+  background: var(--cta-blue);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .6px;
+}
+
+.date-tile strong {
+  display: block;
+  padding: 7px 4px 8px;
+  color: var(--text);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.my-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.my-card-meta .format-badge,
+.my-card-meta .chip {
+  min-height: 24px;
+  font-size: 12px;
+}
+
+.my-training-content h2 {
+  margin-bottom: 12px;
+  font-size: 19px;
+}
+
+.my-session-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+}
+
+.my-session-facts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.trainer-caption {
+  display: block;
+  margin-top: 11px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.my-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+}
+
+.my-card-actions .button {
+  width: 100%;
+}
+
+.my-card-actions small {
+  margin: -2px 0 3px;
+  color: var(--success);
+  font-size: 10px;
+  text-align: center;
+}
+
+.waiting-sections {
+  display: grid;
+  gap: 32px;
+}
+
+.waiting-sections > section {
+  display: grid;
+  gap: 12px;
+}
+
+.waiting-card {
+  display: grid;
+  grid-template-columns: 48px minmax(260px, 1fr) minmax(260px, .8fr);
+  align-items: center;
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.waiting-state-icon {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.waiting-state-icon.approval {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.waiting-state-icon.waitlist {
+  background: var(--cta-light-blue);
+  color: var(--cta-dark-blue);
+}
+
+.waiting-card h3 {
+  margin-bottom: 7px;
+  font-size: 17px;
+}
+
+.waiting-card > div:nth-child(2) > p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0;
+  font-size: 13px;
+}
+
+.waiting-context {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--background);
+}
+
+.waiting-context strong,
+.waiting-context small {
+  display: block;
+}
+
+.waiting-context strong {
+  margin-bottom: 3px;
+  font-size: 13px;
+}
+
+.waiting-context small {
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.text-context {
+  display: block;
+}
+
+.history-table table {
+  background: var(--white);
+}
+
+.history-table th {
+  padding: 12px 14px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .35px;
+}
+
+.history-table td {
+  height: 62px;
+}
+
+.history-table td:first-child {
+  width: 32%;
+}
+
+.download-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 4px;
+  border: 0;
+  border-radius: var(--radius-small);
+  background: transparent;
+  color: var(--cta-blue);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.download-link:hover {
+  background: var(--cta-blue-soft);
+}
+
+.not-available {
+  color: var(--text-secondary);
+}
+
+.certificate-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.certificate-card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--cta-blue);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.certificate-icon {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  border-radius: var(--radius);
+  background: var(--cta-light-blue);
+  color: var(--cta-dark-blue);
+}
+
+.certificate-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .55px;
+}
+
+.certificate-card h3 {
+  min-height: 44px;
+  margin-bottom: 18px;
+  font-size: 17px;
+}
+
+.certificate-card dl {
+  margin: 0 0 18px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.certificate-card dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.certificate-card dt {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.certificate-card dd {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.certificate-card .button {
+  width: 100%;
+}
+
+.my-empty-state,
+.inline-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  text-align: center;
+}
+
+.my-empty-state {
+  min-height: 420px;
+  justify-content: center;
+  padding: 48px;
+}
+
+.inline-empty {
+  padding: 48px 24px;
+}
+
+.my-empty-state h2,
+.inline-empty h3 {
+  margin-bottom: 5px;
+}
+
+.my-empty-state p,
+.inline-empty p {
+  max-width: 430px;
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+
+.cancel-dialog {
+  width: min(520px, 100%);
+}
+
+.cancel-dialog .overlay-heading h2 {
+  margin-top: 2px;
+  font-size: 20px;
+}
+
+.cancel-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin: 22px 0 12px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--error-soft);
+}
+
+.cancel-icon {
+  color: var(--error);
+}
+
+.cancel-message p {
+  margin-bottom: 0;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.no-penalty {
+  margin-bottom: 22px;
+  font-size: 13px;
+}

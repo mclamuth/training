@@ -6,6 +6,7 @@ import {
   AdminPage,
   ApprovalsPage,
   BrowsePage,
+  DesignSystemPage,
   MyTrainingsPage,
   NotFoundPage,
   TeachingPage,
@@ -34,6 +35,7 @@ export const routes: RouteObject[] = [
           </RequireRole>
         ),
       },
+      { path: 'design-system', element: <DesignSystemPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

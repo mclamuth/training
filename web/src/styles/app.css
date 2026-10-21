@@ -1,0 +1,78 @@
+/*
+ * App-specific styles that are not part of the Figma design: accessibility
+ * helpers, sign-in screens, dev tools. Use the design tokens only.
+ */
+
+.skip-link {
+  position: absolute;
+  z-index: 60;
+  top: -100px;
+  left: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-small);
+  background: var(--white);
+  color: var(--cta-blue);
+}
+
+.skip-link:focus {
+  top: 8px;
+}
+
+/* Panels receive focus programmatically when they open; no ring for that. */
+.dialog:focus,
+.drawer:focus,
+.main-content:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.launcher-panel a {
+  color: var(--text);
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.status-screen {
+  max-width: 560px;
+  margin: 15vh auto 0;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.loading-text {
+  color: var(--text-secondary);
+}
+
+.alert {
+  padding: 16px;
+  border-radius: var(--radius);
+  background: var(--error-soft);
+  color: var(--error-dark);
+}
+
+/* Dev mode only: role switcher inside the profile menu. */
+.dev-role-switcher {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-small);
+}
+
+.dev-role-switcher legend {
+  padding: 0 4px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* Full-page empty states (not found, no access) use an h1 for the page title. */
+.empty-state h1 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.empty-state a.button {
+  text-decoration: none;
+}

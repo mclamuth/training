@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { routes } from '../../app/routes';
@@ -21,8 +22,8 @@ function renderAt(path: string, me: Me) {
 
 const employee: Me = {
   id: '00000000-0000-0000-0000-000000000001',
-  displayName: 'Pat Lee',
-  email: 'pat.lee@cta.org',
+  displayName: 'Pat Nguyen',
+  email: 'pat.nguyen@cta.org',
   roles: ['Employee'],
   isOption2: false,
 };
@@ -32,36 +33,55 @@ afterEach(() => {
 });
 
 describe('AppShell', () => {
-  it('renders the CTA header with the app launcher, title and user', async () => {
+  it('renders the CTA header with the app launcher, app name, logo and user', async () => {
     renderAt('/', employee);
 
     const header = screen.getByRole('banner');
-    expect(within(header).getByRole('button', { name: 'CTA apps' })).toBeInTheDocument();
+    expect(within(header).getByRole('button', { name: 'Open app launcher' })).toBeInTheDocument();
     expect(within(header).getByRole('link', { name: 'CTA Training' })).toBeInTheDocument();
-    expect(within(header).getByLabelText('California Teachers Association')).toBeInTheDocument();
-    expect(await within(header).findByText('Pat Lee')).toBeInTheDocument();
+    expect(within(header).getByRole('img', { name: 'California Teachers Association' })).toHaveAttribute(
+      'src',
+      '/cta-logo-white.png',
+    );
+    expect(await within(header).findByText('Pat Nguyen')).toBeInTheDocument();
   });
 
-  it('greets the user on the browse page', async () => {
+  it('opens the app launcher and closes it with Escape', async () => {
+    const user = userEvent.setup();
     renderAt('/', employee);
 
-    expect(await screen.findByRole('heading', { name: 'Welcome, Pat' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Open app launcher' }));
+    expect(screen.getByText('CTA apps')).toBeInTheDocument();
+
+    await user.keyboard('{Escape}');
+    expect(screen.queryByText('CTA apps')).not.toBeInTheDocument();
+  });
+
+  it('shows name, email and role in the profile menu', async () => {
+    const user = userEvent.setup();
+    renderAt('/', employee);
+
+    await user.click(await screen.findByRole('button', { name: /Pat Nguyen/ }));
+
+    expect(screen.getByText('pat.nguyen@cta.org')).toBeInTheDocument();
+    expect(screen.getByText('Employee', { selector: '.profile-role' })).toBeInTheDocument();
   });
 
   it('hides trainer and admin links from employees', async () => {
     renderAt('/', employee);
 
-    const nav = await screen.findByRole('navigation', { name: 'Main' });
+    const nav = await screen.findByRole('navigation', { name: 'Main navigation' });
     expect(await within(nav).findByRole('link', { name: 'My trainings' })).toBeInTheDocument();
     expect(within(nav).queryByRole('link', { name: 'My teaching' })).not.toBeInTheDocument();
     expect(within(nav).queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument();
   });
 
-  it('shows the admin link to admins', async () => {
-    renderAt('/', { ...employee, roles: ['Employee', 'Admin'] });
+  it('shows the admin link to admins and marks the current page', async () => {
+    renderAt('/admin', { ...employee, roles: ['Employee', 'Admin'] });
 
-    const nav = await screen.findByRole('navigation', { name: 'Main' });
-    expect(await within(nav).findByRole('link', { name: 'Admin' })).toBeInTheDocument();
+    const nav = await screen.findByRole('navigation', { name: 'Main navigation' });
+    expect(await within(nav).findByRole('link', { name: 'Admin' })).toHaveAttribute('aria-current', 'page');
+    expect(within(nav).getByRole('link', { name: 'Browse trainings' })).not.toHaveAttribute('aria-current');
   });
 
   it('blocks employees who open the admin page directly', async () => {
@@ -80,5 +100,31 @@ describe('AppShell', () => {
     );
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Unauthorized');
+  });
+});
+
+describe('Design system page', () => {
+  it('opens the dialog, closes it with Escape, and shows a toast after confirming', async () => {
+    const user = userEvent.setup();
+    renderAt('/design-system', employee);
+
+    await user.click(await screen.findByRole('button', { name: 'Open dialog' }));
+    expect(screen.getByRole('dialog', { name: 'Confirm registration' })).toBeInTheDocument();
+
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Open dialog' }));
+    await user.click(screen.getByRole('button', { name: 'Request registration' }));
+    expect(screen.getByText('Registration requested')).toBeInTheDocument();
+  });
+
+  it('opens the side panel', async () => {
+    const user = userEvent.setup();
+    renderAt('/design-system', employee);
+
+    await user.click(await screen.findByRole('button', { name: 'Open side panel' }));
+
+    expect(screen.getByRole('dialog', { name: 'Using Copilot responsibly' })).toBeInTheDocument();
   });
 });

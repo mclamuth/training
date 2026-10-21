@@ -7,7 +7,11 @@ import { initMsal } from './auth/msal';
 import { AuthGate } from './auth/AuthGate';
 import { routes } from './app/routes';
 import './styles/tokens.css';
-import './styles/global.css';
+import './styles/base.css';
+import './styles/shell.css';
+import './styles/components.css';
+import './styles/app.css';
+import './styles/responsive.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {

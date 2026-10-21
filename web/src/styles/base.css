@@ -1,0 +1,94 @@
+/* Ported from the approved Figma Make design (CTA Training App Shell). */
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    min-width: 1024px;
+    color: var(--text);
+    background: var(--background);
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  button {
+    color: inherit;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    outline: none;
+  }
+
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    box-shadow: 0 0 0 3px var(--focus);
+    outline: 2px solid var(--white);
+    outline-offset: 1px;
+  }
+}
+
+.eyebrow {
+  margin-bottom: 8px;
+  color: var(--cta-blue);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -.3px;
+}
+
+h2 {
+  margin-bottom: 6px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h3 {
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.welcome-copy p {
+  margin-bottom: 0;
+}

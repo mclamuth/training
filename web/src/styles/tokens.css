@@ -1,38 +1,28 @@
-/*
- * Design tokens. Placeholder values until the Figma designs set the final
- * palette and type scale; components use these variables only, so updating
- * them here restyles the whole app.
- */
+/* Ported from the approved Figma Make design (CTA Training App Shell). */
+
 :root {
-  /* Brand: the header blue from the legacy app and the Bug Tracking app. */
   --cta-blue: #00609c;
-  --cta-blue-dark: #004a78;
-  --cta-blue-tint: #e6f0f7;
-  --on-brand: #ffffff;
-
-  --surface: #ffffff;
-  --surface-muted: #f5f7f9;
-  --border: #d9dee3;
+  --cta-blue-hover: #005184;
+  --cta-dark-blue: #004a78;
+  --cta-light-blue: #e6f0f7;
+  --cta-blue-soft: #f3f8fb;
   --text: #1d2329;
-  --text-muted: #56606b;
-  --focus-ring: #1a73e8;
-  --danger: #b3261e;
-  --danger-tint: #fdecea;
-
-  --font-sans: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.25rem;
-  --text-xl: 1.75rem;
-
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
-
+  --text-secondary: #56606b;
+  --border: #d9dee3;
+  --border-strong: #b8c0c8;
+  --background: #f5f7f9;
+  --white: #ffffff;
+  --error: #b3261e;
+  --error-dark: #8c1d18;
+  --error-soft: #fae9e7;
+  --success: #246b45;
+  --success-soft: #e7f3ec;
+  --warning: #8a5a00;
+  --warning-soft: #fff3d6;
+  --gray-soft: #eef1f3;
+  --focus: #58a7d5;
+  --shadow-menu: 0 8px 24px rgba(19, 36, 49, 0.16);
+  --shadow-overlay: 0 16px 48px rgba(19, 36, 49, 0.24);
   --radius: 8px;
-  --header-height: 56px;
-  --nav-width: 232px;
+  --radius-small: 6px;
 }

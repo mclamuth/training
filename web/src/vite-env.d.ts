@@ -8,10 +8,13 @@ interface ImportMetaEnv {
   readonly VITE_ENTRA_CLIENT_ID?: string;
   /** The API's delegated scope, e.g. api://<api-client-id>/access_as_user */
   readonly VITE_API_SCOPE?: string;
-  /** Where the header's app launcher goes. Matches the Bug Tracking app. */
-  readonly VITE_APP_LAUNCHER_URL?: string;
+  /** Bug Tracking app URL, listed in the header's app launcher. */
+  readonly VITE_BUG_TRACKING_URL?: string;
 }
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+/** App version from package.json, injected by vite.config.ts. */
+declare const __APP_VERSION__: string;

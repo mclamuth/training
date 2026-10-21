@@ -18,11 +18,12 @@
 
 - Warnings are errors (`Directory.Build.props`), with the recommended .NET analyzers on. Use `[LoggerMessage]` for logging.
 - NuGet versions live only in `Directory.Packages.props`.
-- Web: strict TypeScript, no enums (`erasableSyntaxOnly`); use `as const` objects. Styles use the CSS variables in `web/src/styles/tokens.css`.
+- Web: strict TypeScript, no enums (`erasableSyntaxOnly`); use `as const` objects.
+- Styles come from the approved Figma Make design ("Design CTA Training App Shell", file key `cbdwKvVeTCsBwBQclcSDpN`), split by area under `web/src/styles/`: `tokens.css`, `base.css`, `shell.css`, `components.css`, `responsive.css`, and one file per screen in `styles/pages/`. A screen imports its own page stylesheet. Reuse the design's class names and markup; put app-only additions in `styles/app.css`.
+- Shared UI lives in `web/src/components/ui/` (Button, IconButton, Icon, Chip, FormatBadge, Field, Dialog, Drawer, ToastProvider/useToast). `/design-system` shows them all.
 - Browser storage can be unavailable; wrap every access in try/catch (see `web/src/auth/devRole.ts`).
 
 ## Not yet available
 
-- The shared CTA header from the Bug Tracking app: `web/src/components/shell/AppHeader.tsx` is a stand-in.
 - The legacy database schema, needed for the migration tool.
-- Figma designs: page components are placeholders until the designs land.
+- Designs for the create-training wizard (Prompt 7) and for states and phone layouts (Prompt 10). Pages not yet built are placeholders.

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
-import { useOutletContext } from 'react-router';
+import { Link, useOutletContext } from 'react-router';
 import { hasAnyRole, type Role } from '../auth/roles';
+import { Icon } from '../components/ui/Icon';
 import type { Me } from '../api/me';
 
 /** Shows a friendly "not available" page when the user lacks the role. */
@@ -9,12 +10,18 @@ export function RequireRole({ roles, children }: { roles: readonly Role[]; child
 
   if (!hasAnyRole(me.roles, roles)) {
     return (
-      <section className="page" aria-labelledby="page-title">
-        <h1 id="page-title">This page isn't available to you</h1>
-        <p className="page-description">
+      <div className="empty-state">
+        <span className="empty-icon">
+          <Icon name="info" />
+        </span>
+        <h1>This page isn't available to you</h1>
+        <p>
           It's for {roles.join(' or ').toLowerCase()}s. If you need access, ask a CTA Training admin.
         </p>
-      </section>
+        <Link className="button button-secondary" to="/">
+          Browse trainings
+        </Link>
+      </div>
     );
   }
 

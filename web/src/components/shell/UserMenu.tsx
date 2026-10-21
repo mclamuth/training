@@ -1,39 +1,27 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { config } from '../../config';
 import { signOut } from '../../auth/msal';
 import { getDevRole, setDevRole } from '../../auth/devRole';
 import { allRoles, type Role } from '../../auth/roles';
+import { Icon } from '../ui/Icon';
+import { useDismiss } from '../ui/useDismiss';
 import type { Me } from '../../api/me';
+import { initials } from '../../lib/initials';
 
-function initials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  const first = parts[0]?.[0] ?? '';
-  const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '';
-  return (first + last).toUpperCase() || '?';
+/** Highest role first, as shown in the profile menu ("Admin", "Trainer" or "Employee"). */
+function roleLabel(me: Me): string {
+  const extra = me.roles.filter((r) => r !== 'Employee');
+  const label = extra.length > 0 ? extra.join(', ') : 'Employee';
+  return me.isOption2 ? `${label} · Option 2 staff` : label;
 }
 
 export function UserMenu({ me }: { me: Me }) {
   const [open, setOpen] = useState(false);
-  const menuId = useId();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const close = useCallback(() => setOpen(false), []);
+  useDismiss(open, close, wrapRef);
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    if (!open) return;
-    const onPointerDown = (event: PointerEvent) => {
-      if (!containerRef.current?.contains(event.target as Node)) setOpen(false);
-    };
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false);
-    };
-    document.addEventListener('pointerdown', onPointerDown);
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('pointerdown', onPointerDown);
-      document.removeEventListener('keydown', onKeyDown);
-    };
-  }, [open]);
 
   const switchRole = async (role: Role) => {
     setDevRole(role);
@@ -41,56 +29,52 @@ export function UserMenu({ me }: { me: Me }) {
     await queryClient.resetQueries();
   };
 
-  const devRole = getDevRole();
   const extraRoles = me.roles.filter((r) => r !== 'Employee');
+  const currentDevRole = getDevRole() ?? (extraRoles.at(-1) as Role | undefined) ?? 'Employee';
 
   return (
-    <div className="user-menu" ref={containerRef}>
-      <button
-        type="button"
-        className="user-menu-button"
-        aria-haspopup="true"
-        aria-expanded={open}
-        aria-controls={menuId}
-        onClick={() => setOpen((v) => !v)}
-      >
+    <div className="profile-wrap" ref={wrapRef}>
+      <button type="button" aria-expanded={open} aria-haspopup="true" className="profile-trigger" onClick={() => setOpen((v) => !v)}>
         <span className="avatar" aria-hidden="true">
           {initials(me.displayName)}
         </span>
-        <span className="user-menu-name">{me.displayName}</span>
+        <span>{me.displayName}</span>
+        <Icon name="chevronDown" size={16} />
       </button>
 
       {open && (
-        <div className="user-menu-panel" id={menuId}>
-          <p className="user-menu-who">
-            <strong>{me.displayName}</strong>
-            {me.email && <span>{me.email}</span>}
-            <span className="user-menu-roles">
-              {extraRoles.length > 0 ? extraRoles.join(', ') : 'Employee'}
-              {me.isOption2 && ' · Option 2 staff'}
+        <div className="profile-menu">
+          <div className="profile-heading">
+            <span className="avatar avatar-large" aria-hidden="true">
+              {initials(me.displayName)}
             </span>
-          </p>
+            <div>
+              <strong>{me.displayName}</strong>
+              {me.email && <span>{me.email}</span>}
+            </div>
+          </div>
+          <div className="profile-role">{roleLabel(me)}</div>
 
           {config.authMode === 'dev' && (
             <fieldset className="dev-role-switcher">
               <legend>Dev mode: view as</legend>
               {allRoles.map((role) => (
-                <label key={role}>
+                <label key={role} className="choice">
                   <input
                     type="radio"
                     name="dev-role"
                     value={role}
-                    checked={(devRole ?? (extraRoles.at(-1) as Role | undefined) ?? 'Employee') === role}
+                    checked={currentDevRole === role}
                     onChange={() => void switchRole(role)}
                   />
-                  {role}
+                  <span>{role}</span>
                 </label>
               ))}
             </fieldset>
           )}
 
           {config.authMode === 'entra' && (
-            <button type="button" className="button button-secondary" onClick={() => void signOut()}>
+            <button type="button" className="sign-out" onClick={() => void signOut()}>
               Sign out
             </button>
           )}

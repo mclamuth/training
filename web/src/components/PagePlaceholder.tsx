@@ -1,25 +1,32 @@
 import type { ReactNode } from 'react';
+import { Icon, type IconName } from './ui/Icon';
 
 interface PagePlaceholderProps {
   title: string;
   description: string;
-  /** Which delivery phase builds the real page. */
+  /** Which build step delivers the real page. */
   phase: string;
+  icon: IconName;
   children?: ReactNode;
 }
 
-/** Stand-in for pages that later phases build out from the Figma designs. */
-export function PagePlaceholder({ title, description, phase, children }: PagePlaceholderProps) {
+/** Stand-in for screens that later build steps implement from the approved design. */
+export function PagePlaceholder({ title, description, phase, icon, children }: PagePlaceholderProps) {
   return (
-    <section className="page" aria-labelledby="page-title">
-      <header className="page-header">
-        <h1 id="page-title">{title}</h1>
-        <p className="page-description">{description}</p>
-      </header>
-      <div className="placeholder-card">
-        <p className="placeholder-phase">Coming in {phase}</p>
+    <div className="placeholder-page">
+      <div className="page-heading">
+        <div>
+          <h1>{title}</h1>
+          <p>{description}</p>
+        </div>
+      </div>
+      <div className="empty-state">
+        <span className="empty-icon">
+          <Icon name={icon} />
+        </span>
+        <h3>Coming in {phase}</h3>
         {children}
       </div>
-    </section>
+    </div>
   );
 }

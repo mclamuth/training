@@ -1,3 +1,5 @@
+import type { IconName } from './components/ui/Icon';
+
 export type AuthMode = 'entra' | 'dev';
 
 function readAuthMode(): AuthMode {
@@ -7,6 +9,21 @@ function readAuthMode(): AuthMode {
   return import.meta.env.DEV ? 'dev' : 'entra';
 }
 
+export interface LauncherApp {
+  name: string;
+  url: string;
+  icon: IconName;
+}
+
+/** Other CTA apps in the header's app launcher. An app is listed only when its URL is configured. */
+function readLauncherApps(): LauncherApp[] {
+  const apps: LauncherApp[] = [];
+  if (import.meta.env.VITE_BUG_TRACKING_URL) {
+    apps.push({ name: 'Bug Tracking', url: import.meta.env.VITE_BUG_TRACKING_URL, icon: 'approvals' });
+  }
+  return apps;
+}
+
 export const config = {
   authMode: readAuthMode(),
   entra: {
@@ -14,7 +31,7 @@ export const config = {
     clientId: import.meta.env.VITE_ENTRA_CLIENT_ID ?? '',
     apiScope: import.meta.env.VITE_API_SCOPE ?? '',
   },
-  appLauncherUrl: import.meta.env.VITE_APP_LAUNCHER_URL ?? '',
+  launcherApps: readLauncherApps(),
 } as const;
 
 /** Names of missing settings that Entra sign-in needs; empty when ready. */
