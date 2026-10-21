@@ -1,0 +1,123 @@
+name: Deploy
+
+# Manual until the Azure environments exist. Each GitHub environment (dev, test,
+# prod) holds the variables below; prod should require a reviewer.
+#
+# Environment variables (Settings > Environments > <env> > Variables):
+#   AZURE_CLIENT_ID        client ID of the deploy app registration (OIDC, no secret)
+#   AZURE_TENANT_ID        CTA tenant ID
+#   AZURE_SUBSCRIPTION_ID  subscription holding the resource group
+#   AZURE_RESOURCE_GROUP   e.g. rg-cta-training-dev
+#   API_APP_NAME           apiAppName output of infra/main.bicep
+#   WORKER_APP_NAME        workerAppName output
+#   SQL_SERVER_NAME        sqlServerName output
+#   SQL_SERVER_FQDN        sqlServerFqdn output
+#   DATABASE_NAME          databaseName output
+#   SPA_CLIENT_ID          client ID of the SPA app registration
+#   API_CLIENT_ID          client ID of the API app registration
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy
+        type: choice
+        options: [dev, test, prod]
+        default: dev
+
+permissions:
+  contents: read
+  id-token: write # OIDC sign-in to Azure
+
+concurrency:
+  group: deploy-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Build web app
+        working-directory: web
+        env:
+          VITE_AUTH_MODE: entra
+          VITE_ENTRA_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+          VITE_ENTRA_CLIENT_ID: ${{ vars.SPA_CLIENT_ID }}
+          VITE_API_SCOPE: api://${{ vars.API_CLIENT_ID }}/access_as_user
+        run: |
+          npm ci
+          npm run build
+
+      - name: Publish API (with the web app in wwwroot)
+        run: |
+          dotnet publish src/CtaTraining.Api --configuration Release --output publish/api
+          mkdir -p publish/api/wwwroot
+          cp -r web/dist/. publish/api/wwwroot/
+
+      - name: Publish worker
+        run: dotnet publish src/CtaTraining.Worker --configuration Release --output publish/worker
+
+      - name: Build migration bundle
+        run: |
+          dotnet tool restore
+          dotnet ef migrations bundle --project src/CtaTraining.Infrastructure --configuration Release --self-contained --output publish/efbundle --force
+
+      - name: Sign in to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Open SQL firewall for this runner
+        id: firewall
+        run: |
+          ip=$(curl -s https://api.ipify.org)
+          echo "rule=gh-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+          az sql server firewall-rule create \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" --server "${{ vars.SQL_SERVER_NAME }}" \
+            --name "gh-${{ github.run_id }}" --start-ip-address "$ip" --end-ip-address "$ip"
+
+      - name: Apply database migrations
+        run: |
+          ./publish/efbundle --connection "Server=tcp:${{ vars.SQL_SERVER_FQDN }},1433;Database=${{ vars.DATABASE_NAME }};Authentication=Active Directory Default;Encrypt=True;"
+
+      - name: Close SQL firewall
+        if: always() && steps.firewall.outputs.rule != ''
+        run: |
+          az sql server firewall-rule delete \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" --server "${{ vars.SQL_SERVER_NAME }}" \
+            --name "${{ steps.firewall.outputs.rule }}"
+
+      - name: Deploy API
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ vars.API_APP_NAME }}
+          package: publish/api
+
+      - name: Deploy worker
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ vars.WORKER_APP_NAME }}
+          package: publish/worker
+
+      - name: Smoke test
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS "https://${{ vars.API_APP_NAME }}.azurewebsites.net/health/ready"; then exit 0; fi
+            sleep 10
+          done
+          echo "API did not become ready" && exit 1

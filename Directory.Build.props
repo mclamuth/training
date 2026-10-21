@@ -1,0 +1,13 @@
+<Project>
+  <!-- Settings shared by every .NET project in the repo. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <!-- XML doc comments are encouraged but not required on every member. -->
+    <NoWarn>$(NoWarn);CS1591;CA1707;CA1848;CA1515;CA2007</NoWarn>
+  </PropertyGroup>
+</Project>

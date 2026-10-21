@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CtaTraining.Api/CtaTraining.Api.csproj" />
+    <Project Path="src/CtaTraining.Application/CtaTraining.Application.csproj" />
+    <Project Path="src/CtaTraining.Domain/CtaTraining.Domain.csproj" />
+    <Project Path="src/CtaTraining.Infrastructure/CtaTraining.Infrastructure.csproj" />
+    <Project Path="src/CtaTraining.Worker/CtaTraining.Worker.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CtaTraining.Api.Tests/CtaTraining.Api.Tests.csproj" />
+    <Project Path="tests/CtaTraining.UnitTests/CtaTraining.UnitTests.csproj" />
+  </Folder>
+</Solution>

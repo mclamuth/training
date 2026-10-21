@@ -1,0 +1,38 @@
+/*
+ * Design tokens. Placeholder values until the Figma designs set the final
+ * palette and type scale; components use these variables only, so updating
+ * them here restyles the whole app.
+ */
+:root {
+  /* Brand: the header blue from the legacy app and the Bug Tracking app. */
+  --cta-blue: #00609c;
+  --cta-blue-dark: #004a78;
+  --cta-blue-tint: #e6f0f7;
+  --on-brand: #ffffff;
+
+  --surface: #ffffff;
+  --surface-muted: #f5f7f9;
+  --border: #d9dee3;
+  --text: #1d2329;
+  --text-muted: #56606b;
+  --focus-ring: #1a73e8;
+  --danger: #b3261e;
+  --danger-tint: #fdecea;
+
+  --font-sans: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --radius: 8px;
+  --header-height: 56px;
+  --nav-width: 232px;
+}
