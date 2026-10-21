@@ -1,0 +1,94 @@
+{
+  // Terminal > Run Task... lists these. "Run app" is also the default build
+  // task: Ctrl+Shift+B (Cmd+Shift+B on a Mac).
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run app",
+      "detail": "SQL Server, API and web app together. Open http://localhost:5173",
+      "dependsOn": ["Start SQL Server", "API: run", "Web: run"],
+      "dependsOrder": "sequence",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start SQL Server",
+      "detail": "Local SQL Server in Docker (needs Docker Desktop running)",
+      "type": "shell",
+      "command": "docker compose up -d sql",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+    {
+      "label": "API: run",
+      "detail": "ASP.NET Core API on http://localhost:5065, restarts when C# files change",
+      "type": "shell",
+      "command": "dotnet watch run --project src/CtaTraining.Api --launch-profile http --non-interactive",
+      "isBackground": true,
+      "presentation": { "panel": "dedicated", "group": "app" },
+      "problemMatcher": {
+        "owner": "dotnet-watch",
+        "pattern": { "regexp": "^(.*)\\((\\d+),(\\d+)\\): (error|warning) (.*)$", "file": 1, "line": 2, "column": 3, "severity": 4, "message": 5 },
+        "background": {
+          "beginsPattern": "dotnet watch",
+          "endsPattern": "Now listening on|Application started|error"
+        }
+      }
+    },
+    {
+      "label": "Web: install packages",
+      "detail": "npm install in web/",
+      "type": "shell",
+      "command": "npm install",
+      "options": { "cwd": "${workspaceFolder}/web" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent" }
+    },
+    {
+      "label": "Web: run",
+      "detail": "React app on http://localhost:5173, reloads on save",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": { "cwd": "${workspaceFolder}/web" },
+      "dependsOn": ["Web: install packages"],
+      "isBackground": true,
+      "presentation": { "panel": "dedicated", "group": "app" },
+      "problemMatcher": {
+        "owner": "vite",
+        "pattern": { "regexp": "^__never_matches__$" },
+        "background": {
+          "beginsPattern": "VITE|vite",
+          "endsPattern": "Local:|ready in"
+        }
+      }
+    },
+    {
+      "label": "Test: all",
+      "detail": ".NET tests, then web tests",
+      "dependsOn": ["Test: .NET", "Test: web"],
+      "dependsOrder": "sequence",
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: .NET",
+      "type": "shell",
+      "command": "dotnet test",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Test: web",
+      "type": "shell",
+      "command": "npm test",
+      "options": { "cwd": "${workspaceFolder}/web" },
+      "problemMatcher": []
+    },
+    {
+      "label": "API: build",
+      "type": "shell",
+      "command": "dotnet build src/CtaTraining.Api",
+      "problemMatcher": "$msCompile",
+      "presentation": { "reveal": "silent" }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  // VS Code offers to install these when you open the folder.
+  "recommendations": [
+    "ms-dotnettools.csdevkit",
+    "oxc.oxc-vscode",
+    "ms-azuretools.vscode-bicep",
+    "ms-azuretools.vscode-containers",
+    "github.vscode-github-actions"
+  ]
+}

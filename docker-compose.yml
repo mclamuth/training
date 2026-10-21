@@ -1,0 +1,21 @@
+# Local SQL Server for development. Start with: docker compose up -d
+# (or the "Start SQL Server" task in VS Code). Data survives restarts in the
+# cta-training-sql-data volume; `docker compose down -v` wipes it.
+#
+# The password is for this local container only and matches
+# appsettings.Development.json. Deployed environments use managed identities.
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: cta-training-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Your_password123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - cta-training-sql-data:/var/opt/mssql
+    restart: unless-stopped
+
+volumes:
+  cta-training-sql-data:

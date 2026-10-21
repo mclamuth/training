@@ -29,31 +29,39 @@ docs/                         Setup guides
 
 ## Local setup
 
-You need the [.NET 10 SDK](https://dotnet.microsoft.com/download), Node.js 22,
-and SQL Server. The quickest SQL Server is Docker:
+You need:
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
+- [Node.js 22](https://nodejs.org)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/), for a local SQL Server
+
+### From VS Code
+
+1. Open the repo folder and accept the recommended extensions.
+2. Start Docker Desktop.
+3. **Terminal > Run Task... > Run app** (or press Ctrl+Shift+B). This starts
+   SQL Server, the API and the web app, each in its own terminal panel.
+4. Open http://localhost:5173.
+
+The first run takes a few minutes: Docker downloads SQL Server and npm
+installs packages. Later runs take seconds. Stop everything with the trash-can
+icon on each terminal panel; SQL Server keeps running in Docker until you stop
+it in Docker Desktop.
+
+Other tasks: **Test: all**, **Start SQL Server**, **API: run**, **Web: run**.
+To debug the API with breakpoints, use **Run and Debug > Debug API**.
+
+### From a terminal
 
 ```bash
-docker run -d --name cta-training-sql -p 1433:1433 \
-  -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD='Your_password123' \
-  mcr.microsoft.com/mssql/server:2022-latest
+docker compose up -d                    # SQL Server on localhost:1433
+dotnet run --project src/CtaTraining.Api   # API on http://localhost:5065
+cd web && npm install && npm run dev    # web app on http://localhost:5173
 ```
 
-That password matches `appsettings.Development.json`. It is for local
-containers only; deployed environments use managed identities and no passwords.
-
-Then, in two terminals:
-
-```bash
-# API on http://localhost:5065; applies migrations on startup in Development
-dotnet run --project src/CtaTraining.Api
-
-# Web app on http://localhost:5173; proxies /api to the API
-cd web
-npm install
-npm run dev
-```
-
-Open http://localhost:5173.
+The SQL Server password in `docker-compose.yml` matches
+`appsettings.Development.json`. It is for the local container only; deployed
+environments use managed identities and no passwords.
 
 ### Signing in locally
 

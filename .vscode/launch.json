@@ -1,0 +1,27 @@
+{
+  // Run and Debug panel (Ctrl+Shift+D). Start "Start SQL Server" and
+  // "Web: run" from Terminal > Run Task first if you need them.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug API",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "API: build",
+      "program": "${workspaceFolder}/src/CtaTraining.Api/bin/Debug/net10.0/CtaTraining.Api.dll",
+      "cwd": "${workspaceFolder}/src/CtaTraining.Api",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5065"
+      },
+      "stopAtEntry": false
+    },
+    {
+      "name": "Debug web app in Edge",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/web/src"
+    }
+  ]
+}
